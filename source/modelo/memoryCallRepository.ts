@@ -32,13 +32,10 @@ export class MemoryCallRepository implements ICallRepository{
      * A identificação do registro pode ser feita por referência de objeto ou por chave definida pelos alunos.
      * @param chamado instância contendo os dados atualizados
      * @returns true se atualizado com sucesso, false caso contrário
+     * @includes verfica se o chamado existe na lista, caso não exista retorna false
      */
     atualizarChamado(chamado: Chamado): boolean {
-        const idx = this.listaDeChamados.findIndex(c => c == chamado);
-        if(idx == -1){
-            return false;
-        }
-        return true;
+        return this.listaDeChamados.includes(chamado);
     }
     /**
      * Retorna todos os chamados armazenados atualmente na coleção em memória.
