@@ -25,12 +25,12 @@ export class TextCallUI implements ICallUI{
     start(): void {
         let op = 1;
         while(op!=0){
-            op = Number(prompt('Escolha uma opção/n1- Cadastrar/n2- Listar/n3- Marcar como concluido/n0- Sair'));
+            op = Number(prompt('Escolha uma opção\n1 - Cadastrar\n2 - Listar\n3 - Marcar como concluido\n0 - Sair'));
             switch(op){
                 case 1:
                     let nome : string = prompt('Digite seu nome')!;
                     let descricao : string = prompt('Digite a descrição do problema')!;
-                    let deuCerto : boolean = this.callController.abrirChamado(nome,descricao);
+                    let deuCerto : boolean = this.callController.abrirChamado(nome, descricao);
                     if(deuCerto){
                         alert('Chamado cadastrado');
                     }else{
@@ -38,8 +38,31 @@ export class TextCallUI implements ICallUI{
                     }
                     break;
                 case 2:
+                    let lista = this.callController.listarChamado();
+                    let mensagem: string = 'Lista de Chamados:\n';
+                    lista.forEach(c => {
+                    mensagem += `Nome: ${c.solicitante} - Descrição: ${c.descricao} - Status: ${c.status}\n`;
+                    });
+                    alert(mensagem);
                     break;
-                case 3:
+                case 3: 
+                    let listaChamados = this.callController.listarChamado();
+                    let msg : string = 'Escolha o chamado para marcar como concluído:\n';
+                    listaChamados.forEach((c, index) => {
+                        msg += `${index} - Nome: ${c.solicitante} - Descrição: ${c.descricao} - Status: ${c.status}\n`;
+                    });
+                    let indice : number = Number(prompt(msg)!);
+                    if(indice >=0 && indice < listaChamados.length){
+                        if(listaChamados[indice].status){
+                            alert("Não é possível atualizar um chamado já concluído.");
+                            break;
+                        }
+                        let chamadoParaAtualizar = listaChamados[indice];
+                        this.callController.marcarComoAtendido(chamadoParaAtualizar);
+                        alert("Chamado atualizado com sucesso!\nVerifique a lista de chamados para confirmar");  
+                    }else{
+                        alert('Índice inválido');
+                    }
                     break;
                 case 0:
                     break;
